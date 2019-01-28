@@ -53,7 +53,7 @@ class Pasargad extends PortAbstract implements PortInterface
 	public function redirect()
 	{
 
-        $processor = new RSAProcessor($this->config->get('gateway.pasargad.certificate-path'),RSAKeyType::XMLFile);
+        $processor = new RSAProcessor($this->config->get('gateway.pasargad.certificate'),$this->config->get('gateway.pasargad.rsa_key_type'));
 
 		$url = $this->gateUrl;
 		$redirectUrl = $this->getCallback();

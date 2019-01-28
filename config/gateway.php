@@ -70,7 +70,8 @@ return [
     'pasargad' => [
         'terminalId'    => 000000,
         'merchantId'    => 000000,
-        'certificate-path'    => storage_path('gateway/pasargad/certificate.xml'),
+        'certificate'    => storage_path('gateway/pasargad/certificate.xml'), // Or file_get_contents(storage_path('gateway/pasargad/certificate.xml'))
+        'rsa_key_type'    => 0, // XMLFile = 0 or XMLString = 1
         'callback-url' => '/gateway/callback/pasargad'
     ],
     //-------------------------------
