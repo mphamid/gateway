@@ -1,8 +1,8 @@
 <?php
 
-namespace Larabookir\Gateway\Paypal;
+namespace mphamid\Gateway\Paypal;
 
-use Larabookir\Gateway\Exceptions\BankException;
+use mphamid\Gateway\Exceptions\BankException;
 
 class PaypalException extends BankException
 {

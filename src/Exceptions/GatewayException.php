@@ -1,6 +1,6 @@
 <?php
 
-namespace Larabookir\Gateway\Exceptions;
+namespace mphamid\Gateway\Exceptions;
 /**
  * This exception when throws, user try to submit a payment request who submitted before
  */

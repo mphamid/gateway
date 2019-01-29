@@ -1,6 +1,6 @@
 <?php
 
-namespace Larabookir\Gateway\JahanPay;
+namespace mphamid\Gateway\JahanPay;
 
 use Illuminate\Support\Facades\Input;
 use Larabookir\Gateway\Enum;

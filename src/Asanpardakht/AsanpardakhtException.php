@@ -1,8 +1,8 @@
 <?php
 
-namespace Larabookir\Gateway\Asanpardakht;
+namespace mphamid\Gateway\Asanpardakht;
 
-use Larabookir\Gateway\Exceptions\BankException;
+use mphamid\Gateway\Exceptions\BankException;
 
 class AsanpardakhtException extends BankException
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Larabookir\Gateway\Sadad;
+namespace mphamid\Gateway\Sadad;
 
 class SadadResult
 {

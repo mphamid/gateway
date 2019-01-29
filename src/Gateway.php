@@ -1,11 +1,11 @@
 <?php
 
-namespace Larabookir\Gateway;
+namespace mphamid\Gateway;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Larabookir\Gateway\GatewayResolver
+ * @see \mphamid\Gateway\GatewayResolver
  */
 class Gateway extends Facade
 {

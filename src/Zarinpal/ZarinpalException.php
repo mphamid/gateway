@@ -1,8 +1,8 @@
 <?php
 
-namespace Larabookir\Gateway\Zarinpal;
+namespace mphamid\Gateway\Zarinpal;
 
-use Larabookir\Gateway\Exceptions\BankException;
+use mphamid\Gateway\Exceptions\BankException;
 
 class ZarinpalException extends BankException
 {

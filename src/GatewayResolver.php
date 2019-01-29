@@ -1,20 +1,20 @@
 <?php
 
-namespace Larabookir\Gateway;
+namespace mphamid\Gateway;
 
-use Larabookir\Gateway\Parsian\Parsian;
-use Larabookir\Gateway\Paypal\Paypal;
-use Larabookir\Gateway\Sadad\Sadad;
-use Larabookir\Gateway\Mellat\Mellat;
-use Larabookir\Gateway\Pasargad\Pasargad;
-use Larabookir\Gateway\Saman\Saman;
-use Larabookir\Gateway\Asanpardakht\Asanpardakht;
-use Larabookir\Gateway\Zarinpal\Zarinpal;
-use Larabookir\Gateway\Payir\Payir;
-use Larabookir\Gateway\Exceptions\RetryException;
-use Larabookir\Gateway\Exceptions\PortNotFoundException;
-use Larabookir\Gateway\Exceptions\InvalidRequestException;
-use Larabookir\Gateway\Exceptions\NotFoundTransactionException;
+use mphamid\Gateway\Parsian\Parsian;
+use mphamid\Gateway\Paypal\Paypal;
+use mphamid\Gateway\Sadad\Sadad;
+use mphamid\Gateway\Mellat\Mellat;
+use mphamid\Gateway\Pasargad\Pasargad;
+use mphamid\Gateway\Saman\Saman;
+use mphamid\Gateway\Asanpardakht\Asanpardakht;
+use mphamid\Gateway\Zarinpal\Zarinpal;
+use mphamid\Gateway\Payir\Payir;
+use mphamid\Gateway\Exceptions\RetryException;
+use mphamid\Gateway\Exceptions\PortNotFoundException;
+use mphamid\Gateway\Exceptions\InvalidRequestException;
+use mphamid\Gateway\Exceptions\NotFoundTransactionException;
 use Illuminate\Support\Facades\DB;
 
 class GatewayResolver
@@ -34,11 +34,12 @@ class GatewayResolver
 	 */
 	protected $port;
 
-	/**
-	 * Gateway constructor.
-	 * @param null $config
-	 * @param null $port
-	 */
+    /**
+     * Gateway constructor.
+     * @param null $config
+     * @param null $port
+     * @throws PortNotFoundException
+     */
 	public function __construct($config = null, $port = null)
 	{
 		$this->config = app('config');
@@ -70,11 +71,12 @@ class GatewayResolver
         ];
 	}
 
-	/**
-	 * Call methods of current driver
-	 *
-	 * @return mixed
-	 */
+    /**
+     * Call methods of current driver
+     *
+     * @return mixed
+     * @throws PortNotFoundException
+     */
 	public function __call($name, $arguments)
 	{
 
@@ -129,12 +131,13 @@ class GatewayResolver
 	}
 
 
-	/**
-	 * Create new object from port class
-	 *
-	 * @param int $port
-	 * @throws PortNotFoundException
-	 */
+    /**
+     * Create new object from port class
+     *
+     * @param int $port
+     * @return GatewayResolver
+     * @throws PortNotFoundException
+     */
 	function make($port)
 	{
 		if ($port InstanceOf Mellat) {

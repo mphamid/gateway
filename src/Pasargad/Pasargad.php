@@ -1,12 +1,12 @@
 <?php
 
-namespace Larabookir\Gateway\Pasargad;
+namespace mphamid\Gateway\Pasargad;
 
 use Illuminate\Support\Facades\Input;
-use Larabookir\Gateway\Enum;
+use mphamid\Gateway\Enum;
 use SoapClient;
-use Larabookir\Gateway\PortAbstract;
-use Larabookir\Gateway\PortInterface;
+use mphamid\Gateway\PortAbstract;
+use mphamid\Gateway\PortInterface;
 use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 
 class Pasargad extends PortAbstract implements PortInterface
@@ -52,13 +52,7 @@ class Pasargad extends PortAbstract implements PortInterface
 	 */
 	public function redirect()
 	{
-
-<<<<<<< HEAD
         $processor = new RSAProcessor($this->config->get('gateway.pasargad.certificate'),$this->config->get('gateway.pasargad.rsa_key_type'));
-=======
-		$processor = new RSAProcessor($this->config->get('gateway.pasargad.certificate-path'),RSAKeyType::XMLFile);
->>>>>>> github/dev
-
 		$url = $this->gateUrl;
 		$redirectUrl = $this->getCallback();
 		$invoiceNumber = $this->transactionId();
