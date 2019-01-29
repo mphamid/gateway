@@ -3,13 +3,12 @@
 namespace mphamid\Gateway\JahanPay;
 
 use Illuminate\Support\Facades\Input;
-use Larabookir\Gateway\Enum;
+use mphamid\Gateway\Enum;
+use mphamid\Gateway\PortAbstract;
+use mphamid\Gateway\PortInterface;
 use SoapClient;
-use Larabookir\Gateway\PortAbstract;
-use Larabookir\Gateway\PortInterface;
 
-class JahanPay extends PortAbstract implements PortInterface
-{
+class JahanPay extends PortAbstract implements PortInterface {
     /**
      * Address of main SOAP server
      *
@@ -27,8 +26,7 @@ class JahanPay extends PortAbstract implements PortInterface
     /**
      * {@inheritdoc}
      */
-    public function set($amount)
-    {
+    public function set($amount) {
         $this->amount = ($amount / 10);
 
         return $this;
@@ -37,8 +35,7 @@ class JahanPay extends PortAbstract implements PortInterface
     /**
      * {@inheritdoc}
      */
-    public function ready()
-    {
+    public function ready() {
         $this->sendPayRequest();
 
         return $this;
@@ -47,16 +44,14 @@ class JahanPay extends PortAbstract implements PortInterface
     /**
      * {@inheritdoc}
      */
-    public function redirect()
-    {
-        return \Redirect::to($this->gateUrl.$this->refId());
+    public function redirect() {
+        return \Redirect::to($this->gateUrl . $this->refId());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function verify($transaction)
-    {
+    public function verify($transaction) {
         parent::verify($transaction);
 
         $this->userPayment();
@@ -69,8 +64,7 @@ class JahanPay extends PortAbstract implements PortInterface
      * Sets callback url
      * @param $url
      */
-    function setCallback($url)
-    {
+    function setCallback($url) {
         $this->callbackUrl = $url;
         return $this;
     }
@@ -79,8 +73,7 @@ class JahanPay extends PortAbstract implements PortInterface
      * Gets callback url
      * @return string
      */
-    function getCallback()
-    {
+    function getCallback() {
         if (!$this->callbackUrl)
             $this->callbackUrl = $this->config->get('gateway.jahanpay.callback-url');
 
@@ -94,21 +87,20 @@ class JahanPay extends PortAbstract implements PortInterface
      *
      * @throws JahanPayException
      */
-    protected function sendPayRequest()
-    {
+    protected function sendPayRequest() {
         $this->newTransaction();
 
         try {
             $soap = new SoapClient($this->serverUrl);
             $response = $soap->requestpayment(
-                $this->config->get('gateway.jahanpay.api'),
-                $this->amount,
-                $this->getCallback(),
-                $this->transactionId(),
-                ''
+                    $this->config->get('gateway.jahanpay.api'),
+                    $this->amount,
+                    $this->getCallback(),
+                    $this->transactionId(),
+                    ''
             );
 
-        } catch(\SoapFault $e) {
+        } catch (\SoapFault $e) {
             $this->transactionFailed();
             $this->newLog('SoapFault', $e->getMessage());
             throw $e;
@@ -132,8 +124,7 @@ class JahanPay extends PortAbstract implements PortInterface
      *
      * @throws JahanPayException
      */
-    protected function userPayment()
-    {
+    protected function userPayment() {
         $refId = Input::get('au');
 
         if ($this->refId() != $refId) {
@@ -152,17 +143,16 @@ class JahanPay extends PortAbstract implements PortInterface
      *
      * @throws JahanPayException
      */
-    protected function verifyPayment()
-    {
+    protected function verifyPayment() {
         try {
             $soap = new SoapClient($this->serverUrl);
             $response = $soap->verification(
-                $this->config->get('gateway.jahanpay.api'),
-                $this->amount,
-                $this->refId
+                    $this->config->get('gateway.jahanpay.api'),
+                    $this->amount,
+                    $this->refId
             );
 
-        } catch(\SoapFault $e) {
+        } catch (\SoapFault $e) {
             $this->transactionFailed();
             $this->newLog('SoapFault', $e->getMessage());
             throw $e;

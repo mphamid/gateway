@@ -2,8 +2,7 @@
 
 namespace mphamid\Gateway;
 
-interface PortInterface
-{
+interface PortInterface {
 
     /**
      * This method use for set price in Rial.

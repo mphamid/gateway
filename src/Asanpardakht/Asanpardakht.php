@@ -3,12 +3,11 @@
 namespace mphamid\Gateway\Asanpardakht;
 
 use Illuminate\Support\Facades\Input;
-use SoapClient;
 use mphamid\Gateway\PortAbstract;
 use mphamid\Gateway\PortInterface;
+use SoapClient;
 
-class Asanpardakht extends PortAbstract implements PortInterface
-{
+class Asanpardakht extends PortAbstract implements PortInterface {
     /**
      * Address of main SOAP server
      *
@@ -19,8 +18,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
     /**
      * {@inheritdoc}
      */
-    public function set($amount)
-    {
+    public function set($amount) {
         $this->amount = $amount;
 
         return $this;
@@ -29,8 +27,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
     /**
      * {@inheritdoc}
      */
-    public function ready()
-    {
+    public function ready() {
         $this->sendPayRequest();
 
         return $this;
@@ -39,19 +36,17 @@ class Asanpardakht extends PortAbstract implements PortInterface
     /**
      * {@inheritdoc}
      */
-    public function redirect()
-    {
+    public function redirect() {
 
         return view('gateway::asan-pardakht-redirector')->with([
-            'refId' => $this->refId
+                'refId' => $this->refId
         ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function verify($transaction)
-    {
+    public function verify($transaction) {
         parent::verify($transaction);
 
         $this->userPayment();
@@ -63,8 +58,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
      * Sets callback url
      * @param $url
      */
-    function setCallback($url)
-    {
+    function setCallback($url) {
         $this->callbackUrl = $url;
         return $this;
     }
@@ -73,8 +67,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
      * Gets callback url
      * @return string
      */
-    function getCallback()
-    {
+    function getCallback() {
         if (!$this->callbackUrl)
             $this->callbackUrl = $this->config->get('gateway.asanpardakht.callback-url');
 
@@ -90,8 +83,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
      *
      * @throws AsanpardakhtException
      */
-    protected function sendPayRequest()
-    {
+    protected function sendPayRequest() {
         $this->newTransaction();
 
         $username = $this->config->get('gateway.asanpardakht.username');
@@ -105,8 +97,8 @@ class Asanpardakht extends PortAbstract implements PortInterface
 
         $encryptedRequest = $this->encrypt($req);
         $params = array(
-            'merchantConfigurationID' => $this->config->get('gateway.asanpardakht.merchantConfigId'),
-            'encryptedRequest' => $encryptedRequest
+                'merchantConfigurationID' => $this->config->get('gateway.asanpardakht.merchantConfigId'),
+                'encryptedRequest' => $encryptedRequest
         );
 
         try {
@@ -139,8 +131,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
      *
      * @throws AsanpardakhtException
      */
-    protected function userPayment()
-    {
+    protected function userPayment() {
         $ReturningParams = Input::get('ReturningParams');
         $ReturningParams = $this->decrypt($ReturningParams);
 
@@ -178,17 +169,16 @@ class Asanpardakht extends PortAbstract implements PortInterface
      * @throws AsanpardakhtException
      * @throws SoapFault
      */
-    protected function verifyAndSettlePayment()
-    {
+    protected function verifyAndSettlePayment() {
 
         $username = $this->config->get('gateway.asanpardakht.username');
         $password = $this->config->get('gateway.asanpardakht.password');
 
         $encryptedCredintials = $this->encrypt("{$username},{$password}");
         $params = array(
-            'merchantConfigurationID' => $this->config->get('gateway.asanpardakht.merchantConfigId'),
-            'encryptedCredentials' => $encryptedCredintials,
-            'payGateTranID' => $this->trackingCode
+                'merchantConfigurationID' => $this->config->get('gateway.asanpardakht.merchantConfigId'),
+                'encryptedCredentials' => $encryptedCredintials,
+                'payGateTranID' => $this->trackingCode
         );
 
 
@@ -229,15 +219,13 @@ class Asanpardakht extends PortAbstract implements PortInterface
     }
 
 
-
     /**
      * Encrypt string by key and iv from config
      *
      * @param string $string
      * @return string
      */
-    private function encrypt($string = "")
-    {
+    private function encrypt($string = "") {
 
         $key = $this->config->get('gateway.asanpardakht.key');
         $iv = $this->config->get('gateway.asanpardakht.iv');
@@ -246,9 +234,9 @@ class Asanpardakht extends PortAbstract implements PortInterface
 
             $soap = new SoapClient("https://services.asanpardakht.net/paygate/internalutils.asmx?WSDL");
             $params = array(
-                'aesKey' => $key,
-                'aesVector' => $iv,
-                'toBeEncrypted' => $string
+                    'aesKey' => $key,
+                    'aesVector' => $iv,
+                    'toBeEncrypted' => $string
             );
 
             $response = $soap->EncryptInAES($params);
@@ -266,8 +254,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
      * @param string $string
      * @return string
      */
-    private function decrypt($string = "")
-    {
+    private function decrypt($string = "") {
         $key = $this->config->get('gateway.asanpardakht.key');
         $iv = $this->config->get('gateway.asanpardakht.iv');
 
@@ -275,9 +262,9 @@ class Asanpardakht extends PortAbstract implements PortInterface
 
             $soap = new SoapClient("https://services.asanpardakht.net/paygate/internalutils.asmx?WSDL");
             $params = array(
-                'aesKey' => $key,
-                'aesVector' => $iv,
-                'toBeDecrypted' => $string
+                    'aesKey' => $key,
+                    'aesVector' => $iv,
+                    'toBeDecrypted' => $string
             );
 
             $response = $soap->DecryptInAES($params);
